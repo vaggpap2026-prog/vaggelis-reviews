@@ -1,0 +1,815 @@
+```html
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ταινίες & Σειρές | Reviews</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #020208;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* ===== SPACE BACKGROUND ===== */
+
+.space {
+    position: fixed;
+    inset: 0;
+    z-index: -5;
+    background:
+        radial-gradient(circle at 50% 45%, #24103d 0%, #090713 45%, #020208 100%);
+}
+
+.stars {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 8% 15%, #fff, transparent),
+        radial-gradient(1px 1px at 18% 65%, #fff, transparent),
+        radial-gradient(2px 2px at 32% 25%, #fff, transparent),
+        radial-gradient(1px 1px at 47% 75%, #fff, transparent),
+        radial-gradient(2px 2px at 63% 12%, #fff, transparent),
+        radial-gradient(1px 1px at 78% 45%, #fff, transparent),
+        radial-gradient(2px 2px at 91% 80%, #fff, transparent),
+        radial-gradient(1px 1px at 70% 88%, #fff, transparent);
+}
+
+.sun {
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    right: -60px;
+    top: 90px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle at 35% 30%,
+        #fff7bd,
+        #ffbd28 35%,
+        #ff6a00 70%,
+        #d92b00);
+
+    box-shadow:
+        0 0 45px #ff9d00,
+        0 0 110px rgba(255, 100, 0, .35);
+}
+
+.planet {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 6%;
+    top: 30%;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(135deg, #b6b6b6, #333333);
+
+    box-shadow: 0 0 35px rgba(255,255,255,.12);
+}
+
+.saturn {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    right: 8%;
+    bottom: 18%;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(135deg, #d8a46c, #744727);
+}
+
+.saturn::after {
+    content: "";
+    position: absolute;
+
+    width: 180px;
+    height: 40px;
+
+    left: -30px;
+    top: 40px;
+
+    border: 5px solid rgba(220,180,130,.5);
+    border-radius: 50%;
+
+    transform: rotate(-15deg);
+}
+
+/* ===== HEADER ===== */
+
+header {
+    min-height: 75vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 40px 20px;
+}
+
+.subtitle {
+    color: #d77bff;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    font-size: clamp(50px, 9vw, 105px);
+    line-height: .9;
+    font-weight: 900;
+    letter-spacing: -5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #ff75ca,
+            #9d65ff,
+            #ffffff
+        );
+
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+header p {
+    max-width: 650px;
+    margin-top: 30px;
+
+    color: #9d9da8;
+
+    line-height: 1.7;
+    font-size: 17px;
+}
+
+/* ===== MENU ===== */
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 17px;
+
+    background: rgba(2,2,8,.78);
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+nav button {
+    padding: 11px 24px;
+
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,.12);
+
+    background: transparent;
+    color: #aaa;
+
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: .3s;
+}
+
+nav button:hover,
+nav button.active {
+    color: white;
+    background: rgba(215,90,190,.12);
+    border-color: #ff6cc8;
+}
+
+/* ===== CONTENT ===== */
+
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 100px 25px;
+}
+
+.title {
+    margin-bottom: 45px;
+}
+
+.title h2 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #777;
+}
+
+/* ===== CARDS ===== */
+
+.grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(310px, 1fr));
+
+    gap: 25px;
+}
+
+.card {
+    padding: 30px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.07),
+            rgba(255,255,255,.025)
+        );
+
+    border: 1px solid rgba(255,255,255,.09);
+
+    backdrop-filter: blur(15px);
+
+    transition: .35s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+
+    border-color: rgba(255,100,200,.45);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.5),
+        0 0 30px rgba(255,80,190,.1);
+}
+
+.category {
+    color: #ff70c8;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.card h3 {
+    font-size: 27px;
+    margin: 14px 0;
+}
+
+.rating {
+    color: #ffd166;
+
+    font-weight: bold;
+
+    margin-bottom: 18px;
+}
+
+.review {
+    color: #b6b6c0;
+
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.official {
+    display: inline-block;
+
+    margin-top: 25px;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    color: white;
+    text-decoration: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            #bd3d91,
+            #713bd0
+        );
+
+    font-size: 13px;
+    font-weight: bold;
+
+    transition: .3s;
+}
+
+.official:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(190,60,150,.35);
+}
+
+/* ===== FOOTER ===== */
+
+footer {
+    text-align: center;
+
+    padding: 50px 20px;
+
+    color: #666;
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+}
+
+footer strong {
+    color: #ddd;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 600px) {
+
+    header h1 {
+        letter-spacing: -2px;
+    }
+
+    nav {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    main {
+        padding: 70px 18px;
+    }
+
+    .title h2 {
+        font-size: 32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="space">
+    <div class="stars"></div>
+    <div class="sun"></div>
+    <div class="planet"></div>
+    <div class="saturn"></div>
+</div>
+
+<header>
+
+    <div class="subtitle">
+        Film & Television
+    </div>
+
+    <h1>
+        ΤΑΙΝΙΕΣ<br>
+        & ΣΕΙΡΕΣ
+    </h1>
+
+    <p>
+        Κριτικές και βαθμολογίες για ταινίες και σειρές
+        από διαφορετικά genres και εποχές.
+    </p>
+
+</header>
+
+<nav>
+
+    <button class="active" onclick="filterContent('all', this)">
+        Όλα
+    </button>
+
+    <button onclick="filterContent('movie', this)">
+        Ταινίες
+    </button>
+
+    <button onclick="filterContent('series', this)">
+        Σειρές
+    </button>
+
+</nav>
+
+<main>
+
+    <div class="title">
+
+        <h2>Reviews</h2>
+
+        <p>
+            Επιλεγμένες ταινίες και σειρές.
+        </p>
+
+    </div>
+
+    <div class="grid">
+
+        <!-- INCEPTION -->
+
+        <article class="card movie">
+
+            <div class="category">
+                Movie
+            </div>
+
+            <h3>Inception</h3>
+
+            <div class="rating">
+                9.6 / 10
+            </div>
+
+            <p class="review">
+                Ένα έξυπνο science-fiction thriller που
+                συνδυάζει όνειρα, δράση και ένα ιδιαίτερα
+                ενδιαφέρον concept. Η ατμόσφαιρα και η
+                σκηνοθεσία κάνουν την ταινία ξεχωριστή.
+            </p>
+
+            <a class="official"
+               href="https://www.warnerbros.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- THE DARK KNIGHT -->
+
+        <article class="card movie">
+
+            <div class="category">
+                Movie
+            </div>
+
+            <h3>The Dark Knight</h3>
+
+            <div class="rating">
+                9.8 / 10
+            </div>
+
+            <p class="review">
+                Μία από τις πιο γνωστές superhero ταινίες.
+                Η σκοτεινή ατμόσφαιρα, η ιστορία και οι
+                χαρακτήρες δημιουργούν μία εξαιρετικά
+                δυνατή κινηματογραφική εμπειρία.
+            </p>
+
+            <a class="official"
+               href="https://www.dc.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- DUNE -->
+
+        <article class="card movie">
+
+            <div class="category">
+                Movie
+            </div>
+
+            <h3>Dune</h3>
+
+            <div class="rating">
+                9.4 / 10
+            </div>
+
+            <p class="review">
+                Ένα μεγάλο sci-fi universe με εντυπωσιακά
+                environments, δυνατή φωτογραφία και
+                ιδιαίτερη ατμόσφαιρα. Η ταινία δίνει μεγάλη
+                έμφαση στην εξερεύνηση του κόσμου.
+            </p>
+
+            <a class="official"
+               href="https://www.warnerbros.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- TOP GUN -->
+
+        <article class="card movie">
+
+            <div class="category">
+                Movie
+            </div>
+
+            <h3>Top Gun: Maverick</h3>
+
+            <div class="rating">
+                9.3 / 10
+            </div>
+
+            <p class="review">
+                Γρήγορη δράση, αεροπλάνα και εντυπωσιακές
+                σκηνές πτήσης. Η ταινία συνδυάζει action
+                με χαρακτήρες και μία δυνατή ιστορία.
+            </p>
+
+            <a class="official"
+               href="https://www.paramount.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- JOHN WICK -->
+
+        <article class="card movie">
+
+            <div class="category">
+                Movie
+            </div>
+
+            <h3>John Wick</h3>
+
+            <div class="rating">
+                9.2 / 10
+            </div>
+
+            <p class="review">
+                Ένα action franchise με έντονη σκηνοθεσία,
+                γρήγορη δράση και χαρακτηριστική αισθητική.
+                Ο John Wick έχει γίνει ένας από τους πιο
+                γνωστούς action χαρακτήρες.
+            </p>
+
+            <a class="official"
+               href="https://www.lionsgate.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- OPPENHEIMER -->
+
+        <article class="card movie">
+
+            <div class="category">
+                Movie
+            </div>
+
+            <h3>Oppenheimer</h3>
+
+            <div class="rating">
+                9.5 / 10
+            </div>
+
+            <p class="review">
+                Μία ιστορική και δραματική ταινία που
+                επικεντρώνεται στη ζωή του J. Robert
+                Oppenheimer. Η αφήγηση και η κινηματογράφηση
+                δημιουργούν μία έντονη εμπειρία.
+            </p>
+
+            <a class="official"
+               href="https://www.universalpictures.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- PEAKY BLINDERS -->
+
+        <article class="card series">
+
+            <div class="category">
+                Series
+            </div>
+
+            <h3>Peaky Blinders</h3>
+
+            <div class="rating">
+                9.7 / 10
+            </div>
+
+            <p class="review">
+                Μία crime drama σειρά με ιδιαίτερη
+                ατμόσφαιρα και δυνατούς χαρακτήρες.
+                Η ιστορία της οικογένειας Shelby εξελίσσεται
+                με ένταση και αρκετές ανατροπές.
+            </p>
+
+            <a class="official"
+               href="https://www.netflix.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- BREAKING BAD -->
+
+        <article class="card series">
+
+            <div class="category">
+                Series
+            </div>
+
+            <h3>Breaking Bad</h3>
+
+            <div class="rating">
+                9.9 / 10
+            </div>
+
+            <p class="review">
+                Μία από τις πιο γνωστές crime drama σειρές.
+                Η εξέλιξη των χαρακτήρων και η συνεχής
+                ένταση δημιουργούν μία πολύ δυνατή ιστορία.
+            </p>
+
+            <a class="official"
+               href="https://www.amc.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- THE BOYS -->
+
+        <article class="card series">
+
+            <div class="category">
+                Series
+            </div>
+
+            <h3>The Boys</h3>
+
+            <div class="rating">
+                9.3 / 10
+            </div>
+
+            <p class="review">
+                Μία διαφορετική προσέγγιση στο superhero
+                genre, με σκοτεινή ατμόσφαιρα και έντονους
+                χαρακτήρες. Η σειρά έχει γρήγορο ρυθμό
+                και αρκετές ανατροπές.
+            </p>
+
+            <a class="official"
+               href="https://www.amazon.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- MONEY HEIST -->
+
+        <article class="card series">
+
+            <div class="category">
+                Series
+            </div>
+
+            <h3>Money Heist</h3>
+
+            <div class="rating">
+                9.4 / 10
+            </div>
+
+            <p class="review">
+                Ένα crime thriller με ληστείες,
+                στρατηγική και συνεχείς ανατροπές.
+                Οι χαρακτήρες και το σχέδιο της ομάδας
+                κρατούν το ενδιαφέρον σε υψηλό επίπεδο.
+            </p>
+
+            <a class="official"
+               href="https://www.netflix.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- DARK -->
+
+        <article class="card series">
+
+            <div class="category">
+                Series
+            </div>
+
+            <h3>Dark</h3>
+
+            <div class="rating">
+                9.6 / 10
+            </div>
+
+            <p class="review">
+                Μία ιδιαίτερα σύνθετη sci-fi mystery σειρά.
+                Οι χρονικές γραμμές, τα μυστήρια και οι
+                σχέσεις μεταξύ των χαρακτήρων δημιουργούν
+                ένα πολύπλοκο story.
+            </p>
+
+            <a class="official"
+               href="https://www.netflix.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+        <!-- ARCANE -->
+
+        <article class="card series">
+
+            <div class="category">
+                Series
+            </div>
+
+            <h3>Arcane</h3>
+
+            <div class="rating">
+                9.5 / 10
+            </div>
+
+            <p class="review">
+                Μία animated σειρά με εξαιρετικό visual
+                style, δυνατούς χαρακτήρες και ενδιαφέρουσα
+                ιστορία. Ο κόσμος της σειράς είναι ιδιαίτερα
+                λεπτομερής.
+            </p>
+
+            <a class="official"
+               href="https://www.netflix.com/"
+               target="_blank">
+                Official Website
+            </a>
+
+        </article>
+
+    </div>
+
+</main>
+
+<footer>
+
+    Created by
+    <strong>Vaggelis Papadimitriou</strong>
+
+</footer>
+
+<script>
+
+function filterContent(type, button) {
+
+    const cards = document.querySelectorAll(".card");
+    const buttons = document.querySelectorAll("nav button");
+
+    buttons.forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    cards.forEach(card => {
+
+        if (type === "all") {
+            card.style.display = "block";
+        }
+
+        else if (card.classList.contains(type)) {
+            card.style.display = "block";
+        }
+
+        else {
+            card.style.display = "none";
+        }
+
+    });
+}
+
+</script>
+
+</body>
+</html>
+```
